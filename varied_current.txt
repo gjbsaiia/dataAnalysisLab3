@@ -1,0 +1,14 @@
+# Constant is first value, determines which 
+# variation of e/m equation used.
+# Slope/y-intercept are listed after.
+# Independent value,Dependent(Radius [cm]) 
+V,100.00,
+slope,22.10779,
+intercept,-01.8075,
+0.8,5.90,
+1.0,4.00,
+1.2,3.75,
+1.4,3.25,
+1.6,2.85,
+1.8,2.75,
+2.0,2.25,
