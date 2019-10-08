@@ -91,7 +91,7 @@ def process_vTuples(const, v_vs_R):
 def printError(const, tuples):
     error = True
     print("Error stripping data:")
-    print(" Consts (const, slope, intercept):")
+    print(" Consts (const, slope, intercept, slope uncertainty):")
     for each in const:
         print("     "+str(each))
     print(" DATA:")
