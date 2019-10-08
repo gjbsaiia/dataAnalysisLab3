@@ -62,7 +62,7 @@ def process_iTuples(const, i_vs_R):
     b_best = calcMagField(i_vs_R[min[0]][0])
     b_uncert_best = uncertMagField(i_vs_R[min[0]][0])
     em_uncert_best = uncert_e_div_m(v_const, b_best, b_uncert_best, i_vs_R[min[0]][1])
-    best_i = [str(i_vs_R[min[0]][0])+" A", str(min[1]), str(min[3]), str(em_uncert_best)]
+    best_i = [str(i_vs_R[min[0]][0])+" A", str(min[1]), str(checkSig(min[2], em_uncert_best)), str(em_uncert_best)]
 
 def process_vTuples(const, v_vs_R):
     global v_e_div_m, v_slope_e_div_m, best_v, i_const, v_slope, v_intercept, v_slope_uncert
@@ -86,7 +86,7 @@ def process_vTuples(const, v_vs_R):
     b_best = calcMagField(i_const)
     b_uncert_best = uncertMagField(i_const)
     em_uncert_best = uncert_e_div_m(v_vs_R[min[0]][0], b_best, b_uncert_best, v_vs_R[min[0]][1])
-    best_v = [str(v_vs_R[min[0]][0])+" V", str(min[1]), str(min[3]), str(em_uncert_best)]
+    best_v = [str(v_vs_R[min[0]][0])+" V", str(min[1]), str(checkSig(min[2], em_uncert_best)), str(em_uncert_best)]
 
 def printError(const, tuples):
     error = True
@@ -182,16 +182,16 @@ def diffExpectedCalculated(calc):
 def getBestEmValue(em_Values):
     i = 0
     diff = diffExpectedCalculated(em_Values[i])
-    min = [i, em_Values[i], diff, checkSig(diff)]
+    min = [i, em_Values[i], diff]
     for value in em_Values:
         diff = diffExpectedCalculated(value)
         if(diff < min[2]):
-            min = [i, value, diff, checkSig(diff)]
+            min = [i, value, diff]
         i+=1
     return min
 
-def checkSig(diff):
-    return (diff < e_div_m_unc)
+def checkSig(diff, uncert):
+    return (diff < (uncert+e_div_m_unc))
 
 def analyzeResult():
     print("With Varied Current, and Constant Voltage @ "+str(v_const)+" V:")
@@ -208,8 +208,8 @@ def printGraphCalc(s, s_uncert, int, em, em_uncert):
     print("     intercept: "+str(int))
     print("     slope-based e/m calculation: "+str(em)+" +/- "+str(em_uncert))
     diff = diffExpectedCalculated(em)
-    sig = checkSig(diff)
-    print("     slope-based e/m value is significant: "+str(sig))
+    sig = checkSig(diff, em_uncert)
+    print("     expected e/m value within slope-based error: "+str(sig))
 
 def printProgCalc(em, em_uncert, best_val):
     print(" Program Analysis:")
@@ -219,7 +219,7 @@ def printProgCalc(em, em_uncert, best_val):
     unit = splitt[1]
     print("     best input for calculated e/m value: "+justNum+" +/- "+str(float(justNum) * uncert_powerSupply)+" "+unit)
     print("     e/m value for best input: "+best_val[1]+" +/- "+best_val[3])
-    print("     best e/m value is significant: "+best_val[2])
+    print("     expected e/m value within best e/m value error: "+best_val[2])
 
 # Execute the wrapper
 if __name__ == "__main__":
